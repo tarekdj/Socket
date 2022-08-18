@@ -36,21 +36,13 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket\Exception;
-
-use Hoa\Consistency;
-use Hoa\Exception as HoaException;
+namespace Tarekdj\Socket\Exception;
 
 /**
  * Class \Hoa\Socket\Exception\Exception.
  *
  * Extending the \Hoa\Exception\Exception class.
  */
-class Exception extends HoaException
+class Exception extends \Exception
 {
 }
-
-/**
- * Flex entity.
- */
-Consistency::flexEntity(Exception::class);

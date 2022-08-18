@@ -36,10 +36,10 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket\Connection;
+namespace Tarekdj\Socket\Connection;
 
 use Hoa\Consistency;
-use Hoa\Socket;
+use Tarekdj\Socket;
 use Hoa\Stream;
 
 /**

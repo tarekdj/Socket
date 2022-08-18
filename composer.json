@@ -23,6 +23,37 @@
         "docs"  : "https://central.hoa-project.net/Documentation/Library/Socket",
         "source": "https://central.hoa-project.net/Resource/Library/Socket"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/hoaproject/Stream.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/hoaproject/Exception.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/hoaproject/Consistency.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/hoaproject/Test.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/hoaproject/Event.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/hoaproject/Event.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/hoaproject/Contributions-Atoum-PraspelExtension.git"
+        }
+    ],
+    "minimum-stability": "dev",
     "require": {
         "php"            : ">=7.1",
         "hoa/consistency": "dev-master",
@@ -30,17 +61,15 @@
         "hoa/stream"     : "dev-master"
     },
     "require-dev": {
-        "hoa/test": "dev-master"
+        "phpunit/phpunit": "9.*",
+        "php-mock/php-mock-prophecy": "dev-master",
+        "php-mock/php-mock-phpunit": "dev-master",
+        "badoo/soft-mocks": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "Hoa\\Socket\\"      : "Source",
-            "Hoa\\Socket\\Test\\": "Test"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.x-dev"
+            "Tarekdj\\Socket\\"      : "src",
+            "Tarekdj\\Socket\\Test\\": "tests"
         }
     }
 }

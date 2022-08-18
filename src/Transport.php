@@ -36,7 +36,7 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket;
+namespace Tarekdj\Socket;
 
 /**
  * Class \Hoa\Socket\Transport.

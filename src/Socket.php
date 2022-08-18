@@ -36,9 +36,9 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket;
+namespace Tarekdj\Socket;
 
-use Hoa\Consistency;
+use Tarekdj\Socket\Exception\Exception;
 
 /**
  * Class \Hoa\Socket.
@@ -119,12 +119,7 @@ class Socket
         );
 
         if (0 === $m) {
-            throw new Exception(
-                'URI %s is not recognized (it is not an IPv6, IPv4 nor ' .
-                'domain name).',
-                0,
-                $uri
-            );
+            throw new Exception(sprintf('URI %s is not recognized (it is not an IPv6, IPv4 nor domain name).', $uri));
         }
 
         $this->setTransport($matches['scheme']);
@@ -161,19 +156,21 @@ class Socket
             }
         }
 
-        if (self::ADDRESS_IPV6 == $this->_addressType &&
+        if ($this->ipv6IsSupported()) {
+            throw new Exception(sprintf(
+                'IPv6 support has been disabled from PHP, we cannot use the %s URI.',
+                1
+            ));
+        }
+    }
+
+    protected function ipv6IsSupported()
+    {
+        return self::ADDRESS_IPV6 == $this->_addressType &&
             (
                 !defined('STREAM_PF_INET6') ||
-                (function_exists('socket_create') && !defined('AF_INET6'))
-            )
-           ) {
-            throw new Exception(
-                'IPv6 support has been disabled from PHP, we cannot use ' .
-                'the %s URI.',
-                1,
-                $uri
+                (function_exists('function_exists') && !defined('AF_INET6'))
             );
-        }
     }
 
     /**
@@ -203,11 +200,7 @@ class Socket
         $transport = strtolower($transport);
 
         if (false === Transport::exists($transport)) {
-            throw new Exception(
-                'Transport %s is not enabled on this machine.',
-                3,
-                $transport
-            );
+            throw new Exception(sprintf('Transport %s is not enabled on this machine.', $transport));
         }
 
         $old              = $this->_transport;
@@ -296,8 +289,3 @@ class Socket
         return $out . $this->getAddress();
     }
 }
-
-/**
- * Flex entity.
- */
-Consistency::flexEntity(Socket::class);
