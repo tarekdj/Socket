@@ -62,9 +62,12 @@
     },
     "require-dev": {
         "phpunit/phpunit": "9.*",
-        "php-mock/php-mock-prophecy": "dev-master",
-        "php-mock/php-mock-phpunit": "dev-master",
-        "badoo/soft-mocks": "dev-master"
+        "php-mock/php-mock-phpunit": "dev-master"
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit",
+        "test:coverage": "php -dxdebug.mode=coverage ./vendor/bin/phpunit --coverage-text --whitelist src"
+
     },
     "autoload": {
         "psr-4": {

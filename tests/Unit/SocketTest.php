@@ -38,12 +38,13 @@ declare(strict_types=1);
 
 namespace Tarekdj\Socket\Test\Unit;
 
+use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 use Tarekdj\Socket\Exception\Exception;
 use Tarekdj\Socket\Socket;
 
 /**
- * Class \Hoa\Socket\Test\Unit\Socket.
+ * Class \Tarekdj\Socket\Test\Unit\Socket.
  *
  * Test suite for the socket object.
  *
@@ -151,33 +152,34 @@ class SocketTest extends TestCase
         ]);
     }
 
-//    public function case_ipv6_disabled_by_STREAM_PF_INET6(): void
-//    {
-//        $this
-//            ->given(
-//                $this->function->defined         = false,
-//                $this->function->function_exists = false
-//            )
-//            ->exception(function (): void {
-//                new SUT('tcp://[2001:0db8:85a3::]:80');
-//            })
-//                ->isInstanceOf(SUT\Exception::class);
-//    }
+    use PHPMock;
 
-//    public function case_ipv6_disabled_by_AF_INET6(): void
-//    {
-//        $this
-//            ->given(
-//                $this->function->function_exists = true,
-//                $this->function->defined = function ($constantName) {
-//                    return 'AF_INET6' !== $constantName;
-//                }
-//            )
-//            ->exception(function (): void {
-//                new SUT('tcp://[2001:0db8:85a3::]:80');
-//            })
-//                ->isInstanceOf(SUT\Exception::class);
-//    }
+    /**
+     * @runInSeparateProcess
+     */
+    public function test_case_ipv6_disabled_by_STREAM_PF_INET6(): void
+    {
+
+        $defined = $this->getFunctionMock('Tarekdj\Socket', "defined");
+        $defined->expects($this->once())->willReturn(false);
+
+        $this->assertFalse(defined('MOCK_STREAM_PF_INET6'));
+        $this->expectException(Exception::class);
+        new Socket('tcp://[2001:0db8:85a3::]:80');
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function test_case_ipv6_disabled_by_AF_INET6(): void
+    {
+        $defined = $this->getFunctionMock('Tarekdj\Socket', "defined");
+        $defined->expects($this->once())->willReturn(false);
+
+        $this->assertFalse(defined('MOCK_PF_INET6'));
+        $this->expectException(Exception::class);
+        new Socket('tcp://[2001:0db8:85a3::]:80');
+    }
 
     // todo check this.
     public function test_case_full_path()

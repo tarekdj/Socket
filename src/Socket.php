@@ -41,7 +41,7 @@ namespace Tarekdj\Socket;
 use Tarekdj\Socket\Exception\Exception;
 
 /**
- * Class \Hoa\Socket.
+ * Class \Tarekdj\Socket.
  *
  * Socket analyzer.
  */
