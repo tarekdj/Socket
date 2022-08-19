@@ -36,7 +36,7 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket\Connection;
+namespace Tarekdj\Socket\Connection;
 
 use Hoa\Exception as HoaException;
 use Hoa\Socket;

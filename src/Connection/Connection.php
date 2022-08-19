@@ -38,16 +38,17 @@ declare(strict_types=1);
 
 namespace Tarekdj\Socket\Connection;
 
-use Hoa\Consistency;
-use Tarekdj\Socket;
-use Hoa\Stream;
+use Hoa\Stream as Stream;
+use Tarekdj\Socket\Exception\Exception;
+use Tarekdj\Socket\Socket;
+use Tarekdj\Socket\Transport;
 
 /**
  * Class \Hoa\Socket\Connection.
  *
  * Abstract connection, useful for client and server.
  */
-abstract class Connection extends Stream implements Stream\IStream\In, Stream\IStream\Out, Stream\IStream\Pathable, \Iterator
+abstract class Connection extends Stream\Stream implements Stream\IStream\In, Stream\IStream\Out, Stream\IStream\Pathable, \Iterator
 {
     /**
      * Read data out-of-band.
@@ -296,16 +297,15 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
             $socket = new Socket($socketUri);
         } else {
             $transport = substr($socketUri, 0, $pos);
-            $factory   = Socket\Transport::getFactory($transport);
+            $factory   = Transport::getFactory($transport);
             $socket    = $factory($socketUri);
 
             if (!($socket instanceof Socket)) {
-                throw new Socket\Exception(
+                throw new Exception(sprintf(
                     'The transport registered for scheme “%s” is not valid: ' .
                     'It must return a valid Hoa\Socket\Socket instance.',
-                    0,
                     $transport
-                );
+                ));
             }
         }
 
@@ -806,8 +806,3 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
         return dirname($this->getSocket()->__toString());
     }
 }
-
-/**
- * Flex entity.
- */
-Consistency::flexEntity(Connection::class);

@@ -38,7 +38,7 @@ declare(strict_types=1);
 
 namespace Hoa\Socket\Connection;
 
-use Hoa\Socket;
+use Tarekdj\Socket;
 
 /**
  * Class \Hoa\Socket\Connection\Group.

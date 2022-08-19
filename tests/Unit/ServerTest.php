@@ -36,12 +36,16 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket\Test\Unit;
+namespace Tarekdj\Socket\Test\Unit;
 
 use Hoa\Socket as LUT;
 use Hoa\Socket\Server as SUT;
 use Hoa\Stream;
-use Hoa\Test;
+use PHPUnit\Framework\TestCase;
+use Tarekdj\Socket\Connection\Connection;
+use Tarekdj\Socket\Exception\Exception;
+use Tarekdj\Socket\Server;
+use Tarekdj\Socket\Socket;
 
 /**
  * Class \Hoa\Socket\Test\Unit\Server.
@@ -50,128 +54,83 @@ use Hoa\Test;
  *
  * @license    New BSD License
  */
-class Server extends Test\Unit\Suite
+class ServerTest extends TestCase
 {
-    public function case_is_a_connection(): void
+    public function test_case_is_a_connection(): void
     {
-        $this
-            ->given($this->mockGenerator->orphanize('__construct'))
-            ->when($result = new \Mock\Hoa\Socket\Server())
-            ->then
-                ->object($result)
-                    ->isInstanceOf(LUT\Connection::class);
+        $socket = new Server('tcp://hoa-project.net:80');
+        $this->assertInstanceOf(Connection::class, $socket);
     }
 
-    public function case_constructor(): void
+    public function test_case_constructor(): void
     {
-        $this
-            ->given(
-                $socket  = 'tcp://hoa-project.net:80',
-                $timeout = 42,
-                $flag    = SUT::BIND,
-                $context = 'foo'
-            )
-            ->when($result = new SUT($socket, $timeout, $flag, $context))
-            ->then
-                ->let($_socket = $result->getSocket())
-                ->object($_socket)
-                    ->isInstanceOf(LUT\Socket::class)
-                ->integer($_socket->getAddressType())
-                    ->isEqualTo($_socket::ADDRESS_DOMAIN)
-                ->string($_socket->getTransport())
-                    ->isEqualTo('tcp')
-                ->string($_socket->getAddress())
-                    ->isEqualTo('hoa-project.net')
-                ->integer($_socket->getPort())
-                    ->isEqualTo(80)
-                ->boolean($_socket->isSecured())
-                    ->isFalse()
-                ->integer($result->getTimeout())
-                    ->isEqualTo($timeout)
-                ->integer($result->getFlag())
-                    ->isEqualTo($flag | SUT::LISTEN)
-                ->string($result->getContext())
-                    ->isEqualTo($context);
+        $socket = 'tcp://hoa-project.net:80';
+        $timeout = 42;
+        $flag = Server::BIND;
+        $context = 'foo';
+
+        $result = new Server($socket, $timeout, $flag, $context);
+        $_socket = $result->getSocket();
+        $this->assertInstanceOf(Socket::class, $_socket);
+        $this->assertEquals($_socket->getAddressType(), $_socket::ADDRESS_DOMAIN);
+        $this->assertEquals('tcp', $_socket->getTransport());
+        $this->assertEquals('hoa-project.net', $_socket->getAddress());
+        $this->assertEquals(80, $_socket->getPort());
+        $this->assertFalse($_socket->isSecured());
+        $this->assertEquals($result->getTimeout(), $timeout);
+        $this->assertEquals($flag | Server::LISTEN, $result->getFlag());
+        $this->assertEquals($result->getContext(), $context);
     }
 
-    public function case_constructor_no_flag_with_tcp(): void
+    public function test_case_constructor_no_flag_with_tcp(): void
     {
-        $this
-            ->given(
-                $socket  = 'tcp://hoa-project.net:80',
-                $timeout = 42
-            )
-            ->when($result = new SUT($socket, $timeout))
-            ->then
-                ->let($_socket = $result->getSocket())
-                ->string($_socket->getTransport())
-                    ->isEqualTo('tcp')
-                ->integer($result->getFlag())
-                    ->isEqualTo(SUT::BIND | SUT::LISTEN);
+        $socket = 'tcp://hoa-project.net:80';
+        $timeout = 42;
+        $result = new Server($socket, $timeout);
+        $_socket = $result->getSocket();
+        $this->assertEquals('tcp', $_socket->getTransport());
+        $this->assertEquals(Server::BIND | Server::LISTEN, $result->getFlag());
     }
 
-    public function case_constructor_no_flag_with_udp(): void
+    public function test_case_constructor_no_flag_with_udp(): void
     {
-        $this
-            ->given(
-                $socket  = 'udp://hoa-project.net:80',
-                $timeout = 42
-            )
-            ->when($result = new SUT($socket, $timeout))
-            ->then
-                ->let($_socket = $result->getSocket())
-                ->string($_socket->getTransport())
-                    ->isEqualTo('udp')
-                ->integer($result->getFlag())
-                    ->isEqualTo(SUT::BIND);
+        $socket  = 'udp://hoa-project.net:80';
+        $timeout = 42;
+        $result = new Server($socket, $timeout);
+        $_socket = $result->getSocket();
+        $this->assertEquals('udp', $_socket->getTransport());
+        $this->assertEquals(Server::BIND, $result->getFlag());
     }
 
-    public function case_constructor_with_flag_and_tcp(): void
+    public function test_case_constructor_with_flag_and_tcp(): void
     {
-        $this
-            ->given(
-                $socket  = 'tcp://hoa-project.net:80',
-                $timeout = 42,
-                $flag    = SUT::BIND
-            )
-            ->when($result = new SUT($socket, $timeout, $flag))
-            ->then
-                ->let($_socket = $result->getSocket())
-                ->string($_socket->getTransport())
-                    ->isEqualTo('tcp')
-                ->integer($result->getFlag())
-                    ->isEqualTo(SUT::BIND | SUT::LISTEN);
+        $socket = 'tcp://hoa-project.net:80';
+        $timeout = 42;
+        $flag = Server::BIND;
+        $result = new Server($socket, $timeout, $flag);
+        $_socket = $result->getSocket();
+        $this->assertEquals('tcp', $_socket->getTransport());
+        $this->assertEquals(Server::BIND | Server::LISTEN, $result->getFlag());
     }
 
-    public function case_constructor_with_flag_and_udp(): void
+    public function test_case_constructor_with_flag_and_udp(): void
     {
-        $this
-            ->given(
-                $socket  = 'udp://hoa-project.net:80',
-                $timeout = 42,
-                $flag    = SUT::BIND
-            )
-            ->when($result = new SUT($socket, $timeout, $flag))
-            ->then
-                ->let($_socket = $result->getSocket())
-                ->string($_socket->getTransport())
-                    ->isEqualTo('udp')
-                ->integer($result->getFlag())
-                    ->isEqualTo($flag);
+        $socket = 'udp://hoa-project.net:80';
+        $timeout = 42;
+        $flag = Server::BIND;
+        $result = new Server($socket, $timeout, $flag);
+        $_socket = $result->getSocket();
+        $this->assertEquals('udp', $_socket->getTransport());
+        $this->assertEquals($flag, $result->getFlag());
     }
 
-    public function case_constructor_with_flag_and_udp_listen_not_allowed(): void
+    public function test_case_constructor_with_flag_and_udp_listen_not_allowed(): void
     {
-        $this
-            ->given(
-                $socket  = 'udp://hoa-project.net:80',
-                $timeout = 42,
-                $flag    = SUT::LISTEN
-            )
-            ->exception(function () use ($socket, $timeout, $flag): void {
-                new SUT($socket, $timeout, $flag);
-            })
-                ->isInstanceOf(LUT\Exception::class);
+        $socket = 'udp://hoa-project.net:80';
+        $timeout = 42;
+        $flag = Server::LISTEN;
+        $this->expectException(Exception::class);
+        new Server($socket, $timeout, $flag);
     }
 
     public function case_open_cannot_join(): void

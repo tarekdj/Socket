@@ -36,10 +36,12 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket;
+namespace Tarekdj\Socket;
 
 use Hoa\Consistency;
 use Hoa\Stream;
+use Tarekdj\Socket\Connection\Connection;
+use Tarekdj\Socket\Exception\Exception;
 
 /**
  * Class \Hoa\Socket\Server.
@@ -156,8 +158,7 @@ class Server extends Connection
                         throw new Exception(
                             'Cannot use the flag ' .
                             '\Hoa\Socket\Server::LISTEN ' .
-                            'for connect-less transports (such as UDP).',
-                            0
+                            'for connect-less transports (such as UDP).'
                         );
                     }
 

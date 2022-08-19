@@ -38,17 +38,13 @@ declare(strict_types=1);
 
 namespace Tarekdj\Socket\Test\Unit;
 
-use Hoa\Socket as LUT;
-use Hoa\Socket\Transport as SUT;
-use Hoa\Test;
-use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 use Tarekdj\Socket\Exception\Exception;
 use Tarekdj\Socket\Socket;
 use Tarekdj\Socket\Transport;
 
 /**
- * Class \Hoa\Socket\Test\Unit\Transport.
+ * Class \Tarekdj\Socket\Test\Unit\Transport.
  *
  * Test suite for the transport.
  *
